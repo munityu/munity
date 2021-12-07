@@ -1,0 +1,68 @@
+@use "./index.scss" as *;
+
+.app {
+	@include flex-column;
+	width: 100vw;
+	min-height: 100vh;
+	align-items: center;
+	background: $white-brand;
+	.header {
+		@include flex-row;
+		width: 75%;
+		height: 90px;
+		justify-content: space-between;
+
+		.sidelink {
+			@include flex-row;
+			width: fit-content;
+			height: 100%;
+			&[name="signin"] {
+				width: 200px;
+				@include flex-center;
+				.barlink {
+					width: fit-content;
+					height: fit-content;
+					padding: 10px;
+					border-radius: 40px;
+					font-size: 18px;
+					font-weight: 500;
+					@include transition;
+					&:hover {
+						background-color: $brand-accent-3;
+					}
+					&:active {
+						background-color: $brand-accent-1;
+					}
+				}
+			}
+			.barlink {
+				@include flex-row;
+				justify-content: center;
+				align-items: center;
+				width: 200px;
+				height: 100%;
+				color: $black-accent-header;
+
+				svg {
+					width: 60px;
+				}
+				label {
+					color: $black-accent-header;
+					margin-left: 14px;
+					font-size: 22px;
+					font-weight: 500;
+					cursor: pointer;
+				}
+
+				&[name="logo"] {
+					&:hover {
+						background: none;
+					}
+				}
+				&:hover {
+					background: red;
+				}
+			}
+		}
+	}
+}
