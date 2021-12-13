@@ -8,7 +8,7 @@
 	background: $white-brand;
 	.header {
 		@include flex-row;
-		width: 75%;
+		width: 65%;
 		height: 90px;
 		justify-content: space-between;
 
@@ -17,7 +17,6 @@
 			width: fit-content;
 			height: 100%;
 			&[name="signin"] {
-				width: 200px;
 				@include flex-center;
 				.barlink {
 					width: fit-content;
@@ -39,7 +38,6 @@
 				@include flex-row;
 				justify-content: center;
 				align-items: center;
-				width: 200px;
 				height: 100%;
 				color: $black-accent-header;
 
@@ -59,9 +57,622 @@
 						background: none;
 					}
 				}
+			}
+		}
+
+		.dropdownBarOptions {
+			@include flex-column;
+			position: absolute;
+			width: 100px;
+			background-color: $brand-white;
+			border-radius: 8px;
+			border: 1px solid $brand-accent-1;
+			box-shadow: $shadow-lighten;
+			margin-left: 59.8%;
+			margin-top: 3.5%;
+			overflow: hidden;
+			.dropdownBarOption {
+				@include flex-center;
+				width: 100%;
+				height: 30px;
+				font-size: 14px;
+				@include transition(0.07s);
 				&:hover {
-					background: red;
+					background-color: $brand-accent-3;
+					&[name="danger"] {
+						background-color: $danger-red;
+						color: white;
+					}
 				}
+			}
+		}
+	}
+
+	main {
+		width: 65%;
+		min-height: calc(100vh - 274px);
+		margin-top: 20px;
+		.interactiveBlock {
+			@include flex-row;
+			width: 100%;
+			height: 185px;
+			.create {
+				@include flex-center;
+				flex-direction: column;
+				width: 270px;
+				border: 2px solid $brand-purple;
+				border-radius: 14px;
+				margin-right: 30px;
+				background: $brand-purple;
+				cursor: pointer;
+				box-shadow: $shadow-default;
+				svg {
+					width: 70px;
+					height: 70px;
+					fill: white;
+				}
+				span {
+					margin-top: 10px;
+					font-family: "Proxima Nova";
+					font-size: 20px;
+					font-weight: 600;
+					color: white;
+					text-align: center;
+				}
+				@include transition;
+				&:hover {
+					background: darken($brand-purple, 5%);
+				}
+				&:active {
+					background: darken($brand-purple, 10%);
+				}
+			}
+			.ads {
+				@include flex-center;
+				width: calc(100% - 270px);
+				background-color: $brand-purple;
+				border-radius: 14px;
+				box-shadow: $shadow-default;
+				overflow: hidden;
+				cursor: default;
+
+				svg {
+					width: 500px;
+					height: 150%;
+					transform: translateY(5%);
+					object-fit: contain;
+				}
+
+				h1 {
+					font-family: "Proxima Nova", Arial, Helvetica, sans-serif;
+					font-weight: 800;
+					font-size: 2.5rem;
+					color: white;
+					word-wrap: normal;
+				}
+			}
+		}
+
+		.listBlock {
+			@include flex-column;
+			width: 100%;
+			min-height: 50vh;
+			margin-top: 40px;
+			border: 2px solid $black-004;
+			border-radius: 14px;
+			padding: 10px 0;
+			background: white;
+			box-shadow: $shadow-default;
+			.filtersBlock {
+				@include flex-row;
+				align-items: center;
+				height: 60px;
+				padding: 0 12px;
+			}
+			.eventList {
+				@include flex-column;
+				width: 100%;
+				.eventListHeading {
+					font-family: "Proxima Nova";
+					padding: 0 12px;
+				}
+			}
+		}
+
+		.authBlock {
+			@include flex-row;
+			width: 100%;
+			height: calc(100% - 100px);
+			justify-content: center;
+			align-items: center;
+
+			.fields {
+				@include flex-column;
+				align-items: flex-start;
+				width: 500px;
+				height: 600px;
+				margin-top: 60px;
+				h1 {
+					font-size: 36px;
+				}
+				span {
+					margin: 20px 0 0 0;
+					font-size: 20px;
+					color: #0f1031;
+				}
+				a {
+					color: $brand-purple;
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+				&:nth-child(2) {
+					margin-bottom: 50px;
+				}
+				&:last-child {
+					margin-top: 20px;
+				}
+
+				form {
+					@include flex-column;
+					width: 100%;
+					margin: 20px 0;
+
+					label {
+						@include flex-column;
+						font-size: 16px;
+						margin-bottom: 20px;
+						input {
+							height: 50px;
+							font-size: 20px;
+							background: $brand-white;
+							border-radius: 10px;
+							border: 1px solid $brand-accent-2;
+							margin-top: 6px;
+							padding: 0 10px;
+							@include transition;
+							&:hover {
+								background: $brand-accent-3;
+							}
+							&:focus {
+								background: $brand-white;
+								border: 1px solid $brand-purple;
+							}
+						}
+					}
+
+					button {
+						width: 100%;
+						height: 50px;
+						background: $brand-purple;
+						color: white;
+						margin-top: 20px;
+						border-radius: 10px;
+						font-size: 18px;
+						@include transition;
+						&:hover {
+							background: darken($brand-purple, 4%);
+						}
+						&:active {
+							background: darken($brand-purple, 10%);
+						}
+					}
+				}
+			}
+
+			.info {
+				@include flex-column;
+				align-items: center;
+				width: 20%;
+				height: 600px;
+				padding: 30px 10px;
+				margin-left: 3%;
+				svg {
+					width: 80%;
+					margin-bottom: 40px;
+				}
+				h4 {
+					font-weight: 700;
+					font-size: 26px;
+					line-height: 26px;
+					color: #0f1031;
+					text-align: left;
+					width: 100%;
+					margin-bottom: 10px;
+				}
+				span {
+					font-size: 19px;
+					line-height: 28px;
+				}
+			}
+		}
+
+		.userPage {
+			@include flex-row;
+			width: 100%;
+			height: fit-content;
+			.userBanner {
+				@include anim-fade-in;
+				width: 300px;
+				height: fit-content;
+				background: white;
+				border-radius: 14px;
+				box-shadow: $shadow-default;
+				.userBannerImageBlock {
+					width: 100%;
+					height: 110px;
+					background: $brand-purple;
+					padding: 40px 0 0 20px;
+					border-radius: 20px 20px 0 0;
+					.userBannerImage {
+						border-radius: 10px;
+					}
+				}
+				.userBannerDataBlock {
+					width: 100%;
+					height: calc(100% - 100px);
+					padding: 60px 20px 20px 20px;
+					.userBannerDataName {
+						font-size: 24px;
+					}
+					.userBannerDataStatus {
+						font-size: 16px;
+						color: $black-04;
+						&[id="online"] {
+							color: $brand-purple;
+						}
+					}
+					.userBannerDataStat {
+						@include flex-column;
+						width: 100%;
+						margin: 20px 0;
+						.userBannerDataStatTitle {
+							font-weight: normal;
+							font-size: 14px;
+							line-height: 20px;
+						}
+						div {
+							@include flex-row;
+							svg {
+								width: 16px;
+								margin-right: 4px;
+								fill: $brand-purple;
+							}
+							.userBannerDataStatContent {
+								font-size: 16px;
+								line-height: 18px;
+							}
+						}
+					}
+				}
+				.userBannerOwnerButton {
+					@include grid-center;
+					width: 100%;
+					height: 34px;
+					background: $brand-purple;
+					color: white;
+					border-radius: 8px;
+					margin-top: 20px;
+					font-size: 14px;
+					letter-spacing: 0.6px;
+					box-shadow: $shadow-default;
+					@include transition;
+					transition-property: background;
+					&:hover {
+						background: darken($brand-purple, 4%);
+					}
+				}
+			}
+			.userEvents {
+				@include flex-column;
+				width: calc(100% - 300px);
+				margin-left: 40px;
+				border-radius: 16px;
+				overflow: hidden;
+				box-shadow: $shadow-default;
+			}
+		}
+
+		.accountBlock {
+			@include flex-column;
+			.accountEditable {
+				@include flex-center;
+				width: 100%;
+				padding: 30px;
+				.accountImageBlock {
+					margin-right: 40px;
+					@include flex-column;
+					justify-content: center;
+					img {
+						@include anim-fade-in;
+						border-radius: 14px;
+					}
+					input {
+						display: none;
+					}
+					label {
+						color: $brand-purple;
+						height: 30px;
+						display: grid;
+						place-items: center;
+						border-radius: 6px;
+						font-size: 14px;
+						margin: 10px 0;
+						cursor: pointer;
+						@include transition;
+						transition-property: background;
+						&:hover {
+							background: $brand-accent-3;
+						}
+					}
+				}
+				.accountDataBlock {
+					@include flex-column;
+					label {
+						font-size: 14px;
+						color: $black-07;
+					}
+					input {
+						width: 300px;
+						height: 30px;
+						font-size: 16px;
+						border-radius: 6px;
+						border: 1px solid $brand-accent-2;
+						margin-top: 6px;
+						padding: 0 10px;
+						margin-bottom: 20px;
+						@include transition(0.06s);
+						transition-property: background, border;
+						&:hover {
+							background: $brand-accent-3;
+						}
+						&:focus {
+							border-color: $brand-purple;
+							background-color: white;
+						}
+						&:disabled {
+							border: 1px solid $brand-accent-3;
+							&:hover {
+								background-color: rgba(255, 149, 149, 0.4);
+							}
+						}
+						&[type="submit"] {
+							background-color: $brand-purple;
+							height: 40px;
+							color: white;
+							cursor: pointer;
+							box-shadow: $shadow-default;
+							&:hover {
+								background: darken($brand-purple, 4%);
+							}
+							&:active {
+								background: darken($brand-purple, 6%);
+							}
+						}
+					}
+				}
+			}
+			.accountLists {
+				@include flex-row;
+				justify-content: space-between;
+				width: 100%;
+				height: fit-content;
+				.accountList {
+					width: calc(100% / 3 - 1%);
+					min-height: 300px;
+					border-radius: 16px;
+					box-shadow: $shadow-default;
+					overflow: hidden;
+					.accountListHead {
+						@include flex-center;
+						width: 100%;
+						height: 50px;
+						background-color: $brand-purple;
+						h2 {
+							font-family: "Proxima Nova";
+							color: white;
+							letter-spacing: 1.3px;
+							font-size: 26px;
+						}
+					}
+					.accountListBody {
+						@include flex-column;
+						width: 100%;
+						height: calc(100% - 50px);
+						background-color: white;
+						.accountListObject {
+							@include flex-row;
+							width: 100%;
+							height: 90px;
+							border-bottom: 1px solid $black-004;
+							background-color: white;
+							@include transition;
+							&:hover {
+								background-color: rgb(247, 247, 247);
+							}
+							.accountListDate {
+								@include flex-center;
+								width: 100px;
+								height: 100%;
+								text-align: center;
+								font-family: "Proxima Nova";
+								font-weight: 600;
+								font-size: x-large;
+							}
+							.accountListInfo {
+								@include flex-column;
+								justify-content: center;
+								width: calc(100% - 100px);
+								height: 100%;
+								.accountListTitle {
+									font-family: "Proxima Nova";
+									font-size: x-large;
+									font-weight: 600;
+									cursor: pointer;
+									&:hover {
+										text-decoration: underline;
+									}
+								}
+								.accountListSub {
+									@include flex-row;
+									align-items: center;
+									height: 30px;
+									flex-wrap: wrap;
+									.accountListSubObject {
+										@include flex-row;
+										font-size: 16px;
+										height: fit-content;
+										cursor: help;
+										svg {
+											height: 18px;
+											fill: $black-07;
+											margin-right: 2px;
+										}
+										margin-right: 16px;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.eventListObject {
+		@include flex-row;
+		width: 100%;
+		background: white;
+		border-bottom: 2px solid rgb(233, 233, 233);
+		min-height: 160px;
+		padding: 6px 12px;
+		&:last-child {
+			border: none;
+		}
+		@include transition;
+		&:hover {
+			background: rgb(252, 252, 252);
+		}
+		.eventListMain {
+			@include flex-column;
+			width: 120px;
+			justify-content: space-between;
+			cursor: default;
+			.eventListCreator {
+				@include flex-center;
+				flex-direction: column;
+				width: 100%;
+				height: calc(100% - 30px);
+				.eventListCreatorImage {
+					width: 64px;
+					height: 64px;
+					border: 3px solid $brand-purple;
+					border-radius: 50px;
+				}
+				.eventListCreatorName {
+					font-size: 18px;
+					text-align: center;
+				}
+			}
+			.eventListPrice {
+				@include flex-center;
+				font-weight: 600;
+				width: 100%;
+				height: 30px;
+			}
+		}
+		.eventListInfo {
+			@include flex-column;
+			justify-content: space-between;
+			width: calc(100% - 80px);
+			height: 100%;
+			padding: 4px;
+			padding-top: 8px;
+			padding-bottom: 0;
+			.eventListTitle {
+				font-size: 24px;
+				cursor: pointer;
+				font-weight: 600;
+				font-family: "Proxima Nova";
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+			.eventListDecsription {
+				font-size: 16px;
+				margin-bottom: 10px;
+			}
+			.eventListAddress {
+				@include flex-row;
+				font-size: 16px;
+				height: fit-content;
+				svg {
+					height: 18px;
+					fill: $black-07;
+				}
+			}
+			.eventListSub {
+				@include flex-row;
+				align-items: center;
+				height: 30px;
+				cursor: default;
+				flex-wrap: wrap;
+				.eventListSubObject {
+					@include flex-row;
+					font-size: 16px;
+					height: fit-content;
+					cursor: help;
+					svg {
+						height: 18px;
+						fill: $black-07;
+						margin-right: 2px;
+					}
+					margin-right: 16px;
+				}
+			}
+		}
+	}
+
+	.footer {
+		@include flex-row;
+		align-items: center;
+		width: 65%;
+		height: 100px;
+		justify-content: space-between;
+		// background-color: $brand-accent-3;
+		border-radius: 20px 20px 0 0;
+		margin-top: 64px;
+		padding: 0 30px;
+
+		.sideFooter {
+			@include flex-row;
+			width: fit-content;
+			align-items: center;
+			height: 100%;
+			svg {
+				height: 40px;
+				margin: 0;
+				cursor: default;
+			}
+			label {
+				color: $black-accent-header;
+				margin: 0 14px;
+				font-size: 18px;
+			}
+			.linkItem {
+				svg {
+					height: 20px;
+					margin: 0 6px;
+					fill: $black-04;
+					cursor: pointer;
+					&:hover {
+						fill: $black-svg;
+					}
+				}
+			}
+			a {
+				color: $brand-purple;
+				cursor: pointer;
 			}
 		}
 	}

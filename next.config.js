@@ -13,10 +13,24 @@ module.exports = {
 		ignoreDuringBuilds: false,
 	},
 	images: {
-		domains: ["d3djy7pad2souj.cloudfront.net"],
+		domains: ["d3djy7pad2souj.cloudfront.net", "cdn.discordapp.com"],
 	},
 	reactStrictMode: true,
 	env: {
 		API_URL: process.env.API_URL,
+	},
+	async redirects() {
+		return [
+			{
+				source: "/user",
+				destination: "/account",
+				permanent: true,
+			},
+			{
+				source: "/user/:name/events",
+				destination: "/user/:name",
+				permanent: true,
+			},
+		]
 	},
 }
