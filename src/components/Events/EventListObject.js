@@ -4,17 +4,20 @@ import Link from "next/link"
 import { Pin, Format, Theme, People, Comment } from "../../lib/icons/Misc"
 import style from "../../styles/app.module.scss"
 
-const EventListObject = () => {
+const EventListObject = ({ event }) => {
+	if (event.description)
+		event.description =
+			event.description.length >= 400
+				? event.description.substr(0, 400) + ".."
+				: event.description
 	return (
 		<div className={style.eventListObject}>
 			<div className={style.eventListMain}>
 				<div className={style.eventListCreator} title='Organizer'>
-					<Link href='/user/Kupariss'>
+					<Link href={`/user/${event.organizer.name}`}>
 						<a className={style.eventListCreatorImage}>
 							<Image
-								src={
-									"https://cdn.discordapp.com/attachments/701503404513427466/918933315115950180/unknown.png"
-								}
+								src={event.organizer.image}
 								alt='creatorImage'
 								width={64}
 								height={64}
@@ -24,28 +27,23 @@ const EventListObject = () => {
 							/>
 						</a>
 					</Link>
-					<h3 className={style.eventListCreatorName}>Kupariss</h3>
+					<h3 className={style.eventListCreatorName}>
+						{event.organizer.name}
+					</h3>
 				</div>
 				<span className={style.eventListPrice} title='Price'>
-					$49.00
+					$ {event.price}
 				</span>
 			</div>
 			<div className={style.eventListInfo}>
-				<Link href='/user/1/events/1'>
-					<a className={style.eventListTitle}>Hard rock concert</a>
+				<Link href={`/user/${event.organizer.name}/events/${event.id}`}>
+					<a className={style.eventListTitle}>{event.title}</a>
 				</Link>
 				<span className={style.eventListDecsription}>
-					Best rock concert ashsahjfbshbfhsdbfhjsdbhjsdbhfjsdbfhjb
-					sdhfbsdhfbjshdbfjhsdbfhjsdbfhjsdbfsdjhfbhjdsfbjdhsf
-					bsdjhfbhsdjbfhjsdbfjhsdbfjhsdbfjhsdbfjhsdbfhjsdbf
-					sdbfhsbdhjf dsbfjhbsdhjfbsdhjfbsdhsbdhsvbjhdsbvhdbsjhvbsh
-					jbhdsbhfdbshfbdshjb hjsdbfhjsdbf hjsdbjhf bsdjhfb jshdbf
-					jhbjhsbhfdsbjhfsdbhjfbsdjhfb jhbsdhjfbhjsdbfhj
-					hbdsjhfbsdhjfbjhsdbfhj shjhjfbhjsd sdbfhjsdbfhjdsbfjhdsbjhf
-					sdbfhjdsfbjsdhfbhjd
+					{event.description}
 				</span>
 				<span className={style.eventListAddress} title='Event address'>
-					<Pin /> VDNG, Kyiv, Ukraine
+					<Pin /> {event.address}
 				</span>
 				<div className={style.eventListSub}>
 					<span
@@ -53,25 +51,25 @@ const EventListObject = () => {
 						title='Event theme'
 					>
 						<Theme />
-						Music
+						{event.theme}
 					</span>
 					<span
 						className={style.eventListSubObject}
 						title='Event format'
 					>
 						<Format />
-						Concert
+						{event.format}
 					</span>
 					<span
 						className={style.eventListSubObject}
 						title='Also coming'
 					>
 						<People />
-						69
+						{event.users.length}
 					</span>
 					<span className={style.eventListSubObject} title='Comments'>
 						<Comment />
-						420
+						{event.comments.length}
 					</span>
 				</div>
 			</div>

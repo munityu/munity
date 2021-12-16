@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/PAXANDDOS/uevent-next#readme",
   "dependencies": {
+    "@react-google-maps/api": "^2.7.0",
     "axios": "^0.24.0",
     "dayjs": "^1.10.7",
     "next": "^12.0.7",
@@ -31,7 +32,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hot-toast": "^2.1.1",
-    "react-select": "^5.2.1"
+    "sass": "^1.45.0",
+    "use-places-autocomplete": "^1.11.0"
   },
   "devDependencies": {
     "eslint": "8.4.0",

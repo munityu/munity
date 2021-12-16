@@ -4,23 +4,23 @@ import Image from "next/image"
 import toast from "react-hot-toast"
 import axios from "axios"
 
-import Application from "../../../../components"
-import style from "../../../../styles/app.module.scss"
+import Application from "../../../../../components"
+import style from "../../../../../styles/app.module.scss"
 
-import Map from "../../../../components/Location/Map"
+import Map from "../../../../../components/Location/Map"
 
-const Create = ({ user }) => {
-	const [title, setTitle] = useState("")
-	const [description, setDesctiption] = useState("")
-	const [poster, setPoster] = useState("")
-	const [format, setFormat] = useState("")
-	const [theme, setTheme] = useState("")
+const Edit = ({ user, event }) => {
+	const [title, setTitle] = useState(event.title)
+	const [description, setDesctiption] = useState(event.description)
+	const [poster, setPoster] = useState(event.poster)
+	const [format, setFormat] = useState(event.format)
+	const [theme, setTheme] = useState(event.theme)
 	const [date, setDate] = useState()
 	const [time, setTime] = useState()
-	const [price, setPrice] = useState()
-	const [location, setLocation] = useState()
-	const [address, setAddress] = useState()
-	const [page, setPage] = useState("")
+	const [price, setPrice] = useState(event.price)
+	const [location, setLocation] = useState(event.location)
+	const [address, setAddress] = useState(event.address)
+	const [page, setPage] = useState(event.page)
 
 	const handleSubmit = (e) => {
 		axios
@@ -146,7 +146,7 @@ const Create = ({ user }) => {
 	}
 
 	return (
-		<Application user={user} title='Create an event'>
+		<Application user={user} title='Edit your event'>
 			<div className={style.createPage}>
 				<h1 className={style.createHead}>
 					Let&apos;s create your own event!
@@ -293,17 +293,34 @@ export async function getServerSideProps(ctx) {
 	const cookie = nookies.get(ctx).user
 	const user = cookie ? JSON.parse(cookie) : null
 
-	if (!!!cookie || user.name !== ctx.params.name)
-		return {
-			redirect: {
-				permanent: false,
-				destination: "/signin",
-			},
-		}
+	// if (!!!cookie || user.name !== ctx.params.name)
+	// 	return {
+	// 		redirect: {
+	// 			permanent: false,
+	// 			destination: "/signin",
+	// 		},
+	// 	}
+
+	const event = {
+		title: "The best party ever!",
+		description:
+			"Blah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah",
+		poster: "https://d3djy7pad2souj.cloudfront.net/munity/posters/akino.jpg",
+		format: "Party",
+		theme: "Entertainment",
+		price: 10.0,
+		location: [50.01303427698978, 36.22673034667969],
+		address: "Niggstreet 29, 35, Furland",
+		date: "12-15-2021 16:00:00",
+		nv_notifications: false,
+		public_visitors: false,
+		promocode: null,
+		page: "https://t.me/paxanddos",
+	}
 
 	return {
-		props: { user: cookie ? JSON.parse(cookie) : null },
+		props: { user: cookie ? JSON.parse(cookie) : null, event },
 	}
 }
 
-export default Create
+export default Edit

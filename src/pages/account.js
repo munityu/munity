@@ -135,7 +135,7 @@ const Account = ({ user }) => {
 							id='image'
 							onChange={(e) => handleChange(e)}
 							type='file'
-							accept='image/png, image/jpg, image/jpeg, image/gif'
+							accept='image/png, image/jpg, image/jpeg'
 						/>
 					</form>
 					<form

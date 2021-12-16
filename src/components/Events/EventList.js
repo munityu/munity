@@ -1,52 +1,63 @@
 import { useState } from "react"
-import AsyncSelect from "react-select/async"
-import makeAnimated from "react-select/animated"
 
 import style from "../../styles/app.module.scss"
 import EventListObject from "./EventListObject"
 
-const EventList = () => {
-	const animated = makeAnimated()
-	const [categories, setCategories] = useState([])
+const EventList = ({ events }) => {
+	const [theme, setTheme] = useState()
+	const [format, setFormat] = useState()
+
+	const handleChange = (target) => {
+		switch (target.name) {
+			case "theme":
+				setTheme(target.value)
+				break
+			case "format":
+				setFormat(target.value)
+				break
+		}
+	}
+
 	return (
 		<div className={style.listBlock}>
-			<div className={style.filtersBlock}>
-				<AsyncSelect
-					id={"categories"}
-					components={animated}
-					value={categories}
-					onChange={(categories) =>
-						handleCategoriesChange(categories)
-					}
-					placeholder='Type something..'
-					loadOptions={(data, callback) =>
-						loadOptions(data, callback)
-					}
-					theme={(theme) => ({
-						...theme,
-						colors: {
-							primary25: "#988af2",
-							primary: "#7c6aef",
-							neutral0: "#f2f0fe",
-							neutral90: "white",
-							neutral80: "rgba(24, 24, 26, 0.8)",
-							neutral60: "#7c6aef",
-							neutral50: "rgba(24, 24, 26, 0.5)",
-							neutral40: "#7c6aef",
-							neutral30: "rgba(24, 24, 26, 0.6)",
-							neutral20: "rgba(24, 24, 26, 0.3)",
-							danger: "#ea3c53",
-							dangerLight: "rgba(234, 60, 83, 0.2)",
-							neutral10: "rgba(24, 24, 26, 0.1)",
-						},
-					})}
-				/>
-			</div>
 			<div className={style.eventList}>
 				<h2 className={style.eventListHeading}>Availaible events</h2>
-				<EventListObject />
-				<EventListObject />
-				<EventListObject />
+				<div className={style.filtersBlock}>
+					<label className={style.filtersHeading}>Format:</label>
+					<select
+						value={format}
+						name='format'
+						className={style.filtersSelect}
+						onChange={(e) => handleChange(e.target)}
+					>
+						<option>Conference</option>
+						<option>Seminar</option>
+						<option>Workshop</option>
+						<option>Class</option>
+						<option>Party</option>
+						<option>Fest</option>
+						<option>Con</option>
+						<option>Show/Expo</option>
+					</select>
+					<label className={style.filtersHeading}>Theme:</label>
+					<select
+						value={theme}
+						name='theme'
+						className={style.filtersSelect}
+						onChange={(e) => handleChange(e.target)}
+					>
+						<option>Business</option>
+						<option>Politics</option>
+						<option>Psychology</option>
+						<option>Education</option>
+						<option>Entertainment</option>
+						<option>Music</option>
+						<option>Art</option>
+					</select>
+				</div>
+				{events.map((event) => {
+					return <EventListObject key={event.id} event={event} />
+				})}
 			</div>
 		</div>
 	)
