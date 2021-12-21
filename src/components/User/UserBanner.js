@@ -30,7 +30,10 @@ const UserBanner = ({ owner, isOwner }) => {
 					title='Member for'
 					content={dayjs(owner.created_at).fromNow(true)}
 				/>
-				<UserStat title='Total events' content={2} />
+				<UserStat
+					title='Total events'
+					content={owner.organizer.length}
+				/>
 				{isOwner && (
 					<Link href='/account'>
 						<a className={styles.userBannerOwnerButton}>

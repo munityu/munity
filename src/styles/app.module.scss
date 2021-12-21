@@ -425,13 +425,14 @@
 					}
 				}
 				.accountDataBlock {
+					width: 300px;
 					@include flex-column;
 					label {
 						font-size: 14px;
 						color: $black-07;
 					}
 					input {
-						width: 300px;
+						width: 100%;
 						height: 30px;
 						font-size: 16px;
 						border-radius: 6px;
@@ -467,6 +468,15 @@
 								background: darken($brand-purple, 6%);
 							}
 						}
+						&[type="checkbox"] {
+							width: 20px;
+							&:checked {
+								background: $brand-purple;
+								color: $brand-purple;
+								filter: invert(100%) hue-rotate(180deg)
+									brightness(1.81);
+							}
+						}
 					}
 				}
 			}
@@ -476,7 +486,7 @@
 				width: 100%;
 				height: fit-content;
 				.accountList {
-					width: calc(100% / 3 - 1%);
+					width: calc(100% / 2 - 1%);
 					min-height: 300px;
 					border-radius: 16px;
 					box-shadow: $shadow-default;
@@ -562,6 +572,7 @@
 			box-shadow: $shadow-default;
 			border-radius: 14px;
 			overflow: hidden;
+
 			* {
 				font-family: "Proxima Nova", Arial, Helvetica, sans-serif;
 			}
@@ -580,7 +591,6 @@
 				width: 100%;
 				padding: 0 20px 0 20px;
 				background: white;
-
 				.eventCreateLabel {
 					@include flex-column;
 					font-size: 16px;
@@ -676,6 +686,7 @@
 				}
 				.eventCreatePoster {
 					width: 100%;
+					height: fit-content;
 					@include flex-column;
 					justify-content: center;
 					background: white;
@@ -683,10 +694,13 @@
 					img {
 						@include anim-fade-in;
 						border-radius: 14px;
+						width: 300px;
+						width: 400px;
+						transition: all $transition-default;
 					}
 					input {
 						opacity: 0;
-						transform: translateY(-40px);
+						// transform: translateY(-40px);
 					}
 					label {
 						@include flex-center;
@@ -697,14 +711,12 @@
 						background: $brand-white;
 						border-radius: 6px;
 						font-size: 14px;
-						margin-bottom: 10px;
 						cursor: pointer;
 						@include transition;
 						transition-property: background;
 						&:hover {
 							background: $brand-accent-3;
 						}
-						z-index: 0;
 					}
 				}
 			}
@@ -770,6 +782,32 @@
 						background: darken($brand-purple, 5%);
 					}
 				}
+				.controlBtnBlock {
+					@include flex-row;
+					width: 100%;
+					height: fit-content;
+					justify-content: space-around;
+					.controlBtn {
+						margin-top: 10px;
+						width: fit-content;
+						height: fit-content;
+						padding: 6px;
+						background-color: $brand-purple;
+						border-radius: 6px;
+						color: white;
+						cursor: pointer;
+						&[name="delete"] {
+							background-color: $danger-red;
+						}
+						@include transition;
+						&:hover {
+							background-color: darken($brand-purple, 5%);
+							&[name="delete"] {
+								background-color: darken($danger-red, 5%);
+							}
+						}
+					}
+				}
 			}
 			.eventInfoBlock {
 				width: calc(100% - 300px);
@@ -788,6 +826,7 @@
 						svg {
 							height: 100%;
 							margin-right: 6px;
+							fill: $black-accent-paragraph;
 						}
 						margin-right: 20px;
 						background: white;
@@ -796,6 +835,7 @@
 						padding: 4px;
 						font-size: 16px;
 						cursor: default;
+						color: $black-accent-paragraph;
 					}
 				}
 				.eventDate {
@@ -804,6 +844,7 @@
 					font-size: 18px;
 					font-weight: 600;
 					font-family: "Proxima Nova";
+					color: $black-accent-paragraph;
 				}
 				.eventLocation {
 					width: 100%;
@@ -813,6 +854,7 @@
 						font-size: 18px;
 						font-weight: 600;
 						font-family: "Proxima Nova";
+						color: $black-accent-paragraph;
 					}
 				}
 				.eventDescription {
@@ -820,6 +862,7 @@
 					height: fit-content;
 					font-size: 18px;
 					font-family: "Proxima Nova";
+					color: $black-accent-paragraph;
 				}
 				.eventParticipants {
 					width: 100%;
@@ -833,6 +876,7 @@
 						font-size: 22px;
 						font-weight: 600;
 						font-family: "Proxima Nova";
+						color: $black-accent-header;
 					}
 					.eventParticipantList {
 						width: 100%;
@@ -860,6 +904,8 @@
 					height: fit-content;
 					align-items: flex-end;
 					margin: 10px 0;
+					padding: 10px 0;
+					border-bottom: 1px solid rgb(238, 238, 238);
 					.eventCreateTextarea {
 						resize: vertical;
 						width: 100%;
@@ -913,7 +959,7 @@
 						margin: 10px 0;
 						.eventCommentUser {
 							@include flex-column;
-							width: fit-content;
+							width: 100px;
 							height: 100%;
 							justify-content: center;
 							align-items: center;
@@ -922,7 +968,7 @@
 							}
 							h3 {
 								font-family: "Proxima Nova";
-								font-size: 18px;
+								font-size: 14px;
 								font-weight: 600;
 							}
 						}
@@ -969,6 +1015,7 @@
 			.cardHead {
 				margin-bottom: 16px;
 				svg {
+					fill: rgba(0, 0, 0, 0.54);
 					float: left;
 					height: 24px;
 				}
@@ -1068,7 +1115,6 @@
 		width: 100%;
 		background: white;
 		border-bottom: 2px solid rgb(233, 233, 233);
-		min-height: 160px;
 		padding: 6px 12px;
 		&:last-child {
 			border: none;
@@ -1094,8 +1140,12 @@
 					border-radius: 50px;
 				}
 				.eventListCreatorName {
-					font-size: 18px;
+					font-size: 16px;
+					font-weight: 600;
 					text-align: center;
+					margin-top: 6px;
+					color: $black-07;
+					font-family: "Proxima Nova";
 				}
 			}
 			.eventListPrice {
@@ -1103,16 +1153,14 @@
 				font-weight: 600;
 				width: 100%;
 				height: 30px;
+				color: $black-accent-paragraph;
 			}
 		}
 		.eventListInfo {
 			@include flex-column;
 			justify-content: space-between;
 			width: calc(100% - 80px);
-			height: 100%;
-			padding: 4px;
-			padding-top: 8px;
-			padding-bottom: 0;
+			padding: 0 4px 0 10px;
 			.eventListTitle {
 				font-size: 24px;
 				cursor: pointer;
@@ -1125,14 +1173,16 @@
 			.eventListDecsription {
 				font-size: 16px;
 				margin-bottom: 10px;
+				color: $black-accent-paragraph;
 			}
 			.eventListAddress {
 				@include flex-row;
 				font-size: 16px;
 				height: fit-content;
+				color: $black-accent-paragraph;
 				svg {
 					height: 18px;
-					fill: $black-07;
+					fill: $black-accent-paragraph;
 				}
 			}
 			.eventListSub {
@@ -1148,11 +1198,60 @@
 					cursor: help;
 					svg {
 						height: 18px;
-						fill: $black-07;
+						fill: $black-accent-paragraph;
 						margin-right: 2px;
 					}
 					margin-right: 16px;
+					color: $black-accent-paragraph;
 				}
+			}
+		}
+	}
+
+	.pagination {
+		@include flex-row;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		height: 30px;
+		margin-top: 20px;
+
+		.onPage {
+			font-size: 16px;
+		}
+		.navigationBox {
+			@include flex-row;
+			align-items: center;
+			width: fit-content;
+			height: 100%;
+			border-radius: 12px;
+			overflow: hidden;
+			.navigationBtn {
+				@include flex-center;
+				width: 26px;
+				height: 100%;
+				background: $brand-purple;
+				svg {
+					fill: white;
+					width: 10px;
+				}
+				&:last-child {
+					svg {
+						transform: rotateY(180deg);
+					}
+				}
+				&:disabled {
+					opacity: 0.8;
+					cursor: default;
+				}
+			}
+			span {
+				@include flex-center;
+				width: 26px;
+				height: 100%;
+				color: white;
+				background-color: $brand-purple;
+				cursor: default;
 			}
 		}
 	}

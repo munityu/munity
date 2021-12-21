@@ -1,6 +1,5 @@
 import { destroyCookie } from "nookies"
 import { useState } from "react"
-import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import axios from "axios"
@@ -12,26 +11,24 @@ const AccountDropdown = ({ user }) => {
 	const [toggle, setToggle] = useState(false)
 
 	const logout = () => {
-		destroyCookie(null, "user", { path: "/" })
-		router.replace("/")
-		// const api = {
-		// 	headers: {
-		// 		"Content-Type": "application/json",
-		// 		Accept: "application/json",
-		// 		Authorization: user.token,
-		// 	},
-		// 	url: `${process.env.API_URL}/auth/signout`,
-		// }
-		// axios
-		// 	.post(api.url, null, {
-		// 		headers: api.headers,
-		// 		withCredentials: true,
-		// 	})
-		// 	.then(() => {
-		// 		destroyCookie(null, "user", { path: "/" })
-		// 		router.replace("/")
-		// 		return "Goodbye!"
-		// 	})
+		const api = {
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+				Authorization: user.token,
+			},
+			url: `${process.env.API_URL}/auth/signout`,
+		}
+		axios
+			.post(api.url, null, {
+				headers: api.headers,
+				withCredentials: true,
+			})
+			.then(() => {
+				destroyCookie(null, "user", { path: "/" })
+				router.replace("/")
+				return "Goodbye!"
+			})
 	}
 
 	return (

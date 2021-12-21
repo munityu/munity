@@ -13,7 +13,7 @@ const style = {
 	background: "rgb(250, 249, 250)",
 }
 
-const PlacesSearch = ({ panTo, setLocation, setMarker }) => {
+const PlacesSearch = ({ panTo, setLocation, setMarker, setCenter }) => {
 	const {
 		ready,
 		value,
@@ -40,8 +40,9 @@ const PlacesSearch = ({ panTo, setLocation, setMarker }) => {
 					panTo({ lat, lng })
 					setLocation([lat, lng])
 					setMarker([{ lat: lat, lng: lng }])
+					setCenter({ lat, lng })
 				})
-				.catch((error) => console.log("😱 Error: ", error))
+				.catch((e) => console.log("😱 Error: ", e))
 		}
 
 	const renderSuggestions = () =>

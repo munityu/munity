@@ -1,8 +1,9 @@
+import axios from "axios"
 import Link from "next/link"
-import nookies, { setCookie } from "nookies"
-import { useState } from "react"
 import { useRouter } from "next/router"
+import { useState } from "react"
 import toast from "react-hot-toast"
+import nookies, { setCookie } from "nookies"
 
 import Application from "../components"
 import { Checking } from "../lib/icons/Undraw"
@@ -46,47 +47,54 @@ const Signup = () => {
 			},
 			url: `${process.env.API_URL}/auth/register`,
 		}
-		const promise = axios.post(api.url, api.data, {
-			headers: api.headers,
-			withCredentials: true,
-		})
-		toast.promise(promise, {
-			loading: "Signing up..",
-			success: (response) => {
-				setCookie(null, "user", response.data.cookie, {
-					maxAge: JSON.parse(response.data.cookie).ttl,
-					path: "/",
-				})
-				router.replace("/calendars")
-				return response.data.message
-			},
-			error: (error) => {
-				if (error.response.data.errors) {
-					if (error.response.data.errors.name)
-						for (
-							let i = 0;
-							i < error.response.data.errors.name.length;
-							i++
-						)
-							toast.error(error.response.data.errors.name[i])
-					if (error.response.data.errors.email)
-						for (
-							let i = 0;
-							i < error.response.data.errors.email.length;
-							i++
-						)
-							toast.error(error.response.data.errors.password[i])
-					if (error.response.data.errors.password)
-						for (
-							let i = 0;
-							i < error.response.data.errors.password.length;
-							i++
-						)
-							toast.error(error.response.data.errors.password[i])
-				}
-				return error.response.data.message
-			},
-		})
+
+		toast.promise(
+			axios.post(api.url, api.data, {
+				headers: api.headers,
+				withCredentials: true,
+			}),
+			{
+				loading: "Signing up..",
+				success: (response) => {
+					setCookie(null, "user", response.data.cookie, {
+						maxAge: JSON.parse(response.data.cookie).ttl,
+						path: "/",
+					})
+					router.replace("/")
+					return response.data.message
+				},
+				error: (error) => {
+					if (error.response.data.errors) {
+						if (error.response.data.errors.name)
+							for (
+								let i = 0;
+								i < error.response.data.errors.name.length;
+								i++
+							)
+								toast.error(error.response.data.errors.name[i])
+						if (error.response.data.errors.email)
+							for (
+								let i = 0;
+								i < error.response.data.errors.email.length;
+								i++
+							)
+								toast.error(
+									error.response.data.errors.password[i]
+								)
+						if (error.response.data.errors.password)
+							for (
+								let i = 0;
+								i < error.response.data.errors.password.length;
+								i++
+							)
+								toast.error(
+									error.response.data.errors.password[i]
+								)
+					}
+					return error.response.data.message
+				},
+			}
+		)
 	}
 
 	return (
@@ -171,7 +179,7 @@ export async function getServerSideProps(ctx) {
 		return {
 			redirect: {
 				permanent: false,
-				destination: "/calendars",
+				destination: "/",
 			},
 		}
 

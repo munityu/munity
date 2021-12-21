@@ -13,7 +13,7 @@ module.exports = {
 		ignoreDuringBuilds: false,
 	},
 	images: {
-		domains: ["d3djy7pad2souj.cloudfront.net", "cdn.discordapp.com"],
+		domains: ["d3djy7pad2souj.cloudfront.net"],
 	},
 	reactStrictMode: true,
 	env: {

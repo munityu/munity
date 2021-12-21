@@ -11,7 +11,7 @@ const CommentObject = ({ comment }) => {
 					width={70}
 					height={70}
 					layout='fixed'
-					quality={75}
+					quality={45}
 					objectFit='cover'
 					priority
 				/>

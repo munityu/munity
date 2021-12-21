@@ -1,5 +1,9 @@
-import nookies from "nookies"
+import axios from "axios"
+import { useEffect, useState } from "react"
+import Link from "next/link"
 import Image from "next/image"
+import { useRouter } from "next/router"
+import nookies from "nookies"
 import dayjs from "dayjs"
 import calendar from "dayjs/plugin/calendar"
 
@@ -9,7 +13,6 @@ import style from "../../../../../styles/app.module.scss"
 import { Format, People, Theme } from "../../../../../lib/icons/Misc"
 import CommentObject from "../../../../../components/Comments/CommentObject"
 import CreateComment from "../../../../../components/Comments/CreateComment"
-import Link from "next/link"
 
 const EventParticipant = ({ participant }) => {
 	return (
@@ -28,11 +31,22 @@ const EventParticipant = ({ participant }) => {
 }
 
 const Event = ({ user, event }) => {
-	console.log(event)
 	dayjs.extend(calendar)
+	const router = useRouter()
+	const [comments, setComments] = useState(event.comments)
+	const [isMember, setIsMember] = useState(false)
+
+	useEffect(() => {
+		for (const member of event.members)
+			if (member.id === user?.id) setIsMember(true)
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	const deleteEvent = () => {
-		console.log("yrs")
+		axios
+			.delete(`${process.env.API_URL}/events/${event.id}`, {
+				headers: { Authorization: user.token },
+			})
+			.then(() => router.replace("/"))
 	}
 
 	return (
@@ -40,19 +54,21 @@ const Event = ({ user, event }) => {
 			<div className={style.eventPage}>
 				<div className={style.eventPosterBlock}>
 					<div className={style.eventPoster}>
-						<Image
-							src={event.poster}
-							alt='posterPreview'
-							width={300}
-							height={400}
-							layout='fixed'
-							quality={100}
-							objectFit='cover'
-						/>
+						{event.poster && (
+							<Image
+								src={event.poster}
+								alt='posterPreview'
+								width={300}
+								height={400}
+								layout='fixed'
+								quality={100}
+								objectFit='cover'
+							/>
+						)}
 					</div>
 					<div className={style.eventCreatorBlock}>
 						<Image
-							src={event.organizer.image}
+							src={event.organizer[0].image}
 							alt='avatarPreview'
 							width={60}
 							height={60}
@@ -61,41 +77,36 @@ const Event = ({ user, event }) => {
 							objectFit='cover'
 						/>
 						<span>
-							{event.organizer.name} <small>organizer</small>
+							{event.organizer[0].name} <small>organizer</small>
 						</span>
 					</div>
 					<span className={style.eventPrice}>$ {event.price}</span>
-					<Link
-						href={`/user/${event.organizer.name}/events/${event.id}/order`}
-					>
-						<a className={style.eventBuyBtn}>Buy a ticket</a>
-					</Link>
-					{user.name === event.organizer.name && (
-						<>
+					{isMember ? (
+						<a className={style.eventBuyBtn}>
+							You&apos;re a member
+						</a>
+					) : (
+						<Link
+							href={`/user/${event.organizer[0].name}/events/${event.id}/order`}
+						>
+							<a className={style.eventBuyBtn}>Buy a ticket</a>
+						</Link>
+					)}
+					{user && user.name === event.organizer[0].name && (
+						<div className={style.controlBtnBlock}>
 							<Link
 								href={`/user/${user.name}/events/${event.id}/edit`}
 							>
-								<a
-									style={{
-										marginTop: "6px",
-										width: "fit-content",
-									}}
-								>
-									Edit event
-								</a>
+								<a className={style.controlBtn}>Edit event</a>
 							</Link>
 							<a
-								style={{
-									marginTop: "6px",
-									color: "red",
-									cursor: "pointer",
-									width: "fit-content",
-								}}
+								className={style.controlBtn}
 								onClick={deleteEvent}
+								name='delete'
 							>
 								Delete event
 							</a>
-						</>
+						</div>
 					)}
 				</div>
 				<div className={style.eventInfoBlock}>
@@ -111,24 +122,24 @@ const Event = ({ user, event }) => {
 						</span>
 						<span className={style.eventSub} title='Also Coming'>
 							<People />
-							{event.users.length}
+							{event.members.length}
 						</span>
 					</div>
 					<span className={style.eventDate}>
-						{dayjs().calendar(event.date)}
+						{dayjs(event.date).calendar()}
 					</span>
 					<div className={style.eventLocation}>
 						<span>{event.address}</span>
-						<PointedMap location={event.location} />
+						<PointedMap location={event.location.coordinates} />
 					</div>
 					<span className={style.eventDescription}>
 						{event.description}
 					</span>
-					{event.users.length !== 0 ? (
+					{event.public_visitors && event.members.length !== 0 ? (
 						<div className={style.eventParticipants}>
 							<h2>Also coming</h2>
 							<div className={style.eventParticipantList}>
-								{event.users.map((participant) => {
+								{event.members.map((participant) => {
 									return (
 										<EventParticipant
 											key={participant.id}
@@ -141,8 +152,14 @@ const Event = ({ user, event }) => {
 					) : null}
 					<div className={style.eventComments}>
 						<h2>Comments</h2>
-						<CreateComment user={user} event_id={event.id} />
-						{event.comments.map((comment) => {
+						{user && (
+							<CreateComment
+								user={user}
+								event_id={event.id}
+								setComments={setComments}
+							/>
+						)}
+						{comments.map((comment) => {
 							return (
 								<CommentObject
 									key={comment.id}
@@ -160,60 +177,15 @@ const Event = ({ user, event }) => {
 export async function getServerSideProps(ctx) {
 	const cookie = nookies.get(ctx).user
 
-	const event = {
-		id: 1,
-		title: "The best party ever!",
-		description:
-			"Blah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah",
-		poster: "https://d3djy7pad2souj.cloudfront.net/munity/posters/akino.jpg",
-		format: "Party",
-		theme: "Entertainment",
-		price: 10.0,
-		location: [50.01303427698978, 36.22673034667969],
-		address: "Niggstreet 29, 35, Furland",
-		date: "12-15-2021 16:00:00",
-		nv_notifications: false,
-		public_visitors: false,
-		promocode: null,
-		users: [
-			{
-				id: 1,
-				name: "Nword",
-				image: "https://cdn.discordapp.com/attachments/641997907154698250/921027016516575252/come-again-nigga-are-you-feeling-it-now-mr-krabs-55766070.jpg",
-			},
-			{
-				id: 2,
-				name: "Furry",
-				image: "https://cdn.discordapp.com/attachments/641997907154698250/921027016516575252/come-again-nigga-are-you-feeling-it-now-mr-krabs-55766070.jpg",
-			},
-		],
-		organizer: {
-			name: "Kupariss",
-			image: "https://cdn.discordapp.com/attachments/701503404513427466/918933315115950180/unknown.png",
-		},
-		comments: [
-			{
-				id: 1,
-				user: {
-					name: "Cringe",
-					image: "https://cdn.discordapp.com/attachments/701503404513427466/918933315115950180/unknown.png",
-				},
-				content: "I'm already cumming!",
-			},
-			{
-				id: 2,
-				user: {
-					name: "Dumbass",
-					image: "https://cdn.discordapp.com/attachments/701503404513427466/918933315115950180/unknown.png",
-				},
-				content: "What?!",
-			},
-		],
-		page: "https://t.me/paxanddos",
-	}
+	const response = await axios.get(
+		`${process.env.API_URL}/events/${ctx.params.id}`
+	)
 
 	return {
-		props: { user: cookie ? JSON.parse(cookie) : null, event },
+		props: {
+			user: cookie ? JSON.parse(cookie) : null,
+			event: response.data,
+		},
 	}
 }
 

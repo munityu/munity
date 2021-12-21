@@ -1,7 +1,8 @@
-import Link from "next/link"
-import nookies, { setCookie } from "nookies"
+import axios from "axios"
 import { useState } from "react"
+import Link from "next/link"
 import { useRouter } from "next/router"
+import nookies, { setCookie } from "nookies"
 import toast from "react-hot-toast"
 
 import Application from "../components"
@@ -25,62 +26,51 @@ const Signin = () => {
 	}
 
 	const handleSubmit = () => {
-		const user = {
-			name: "PAXANDDOS",
-			email: "pashalitovka@gmail.com",
-			image: "https://cdn.discordapp.com/attachments/701503404513427466/918933315115950180/unknown.png",
-			role: "user",
+		const api = {
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+			},
+			data: {
+				name: name,
+				password: password,
+			},
+			url: `${process.env.API_URL}/auth/signin`,
 		}
-		setCookie(null, "user", JSON.stringify(user), {
-			maxAge: 16000,
-			path: "/",
+		const promise = axios.post(api.url, api.data, {
+			headers: api.headers,
+			withCredentials: true,
 		})
-		router.replace("/")
-		// const api = {
-		// 	headers: {
-		// 		"Content-Type": "application/json",
-		// 		Accept: "application/json",
-		// 	},
-		// 	data: {
-		// 		name: name,
-		// 		password: password,
-		// 	},
-		// 	url: `${process.env.API_URL}/auth/signin`,
-		// }
-		// const promise = axios.post(api.url, api.data, {
-		// 	headers: api.headers,
-		// 	withCredentials: true,
-		// })
-		// toast.promise(promise, {
-		// 	loading: "Logging in...",
-		// 	success: (response) => {
-		// 		setCookie(null, "user", response.data.cookie, {
-		// 			maxAge: JSON.parse(response.data.cookie).ttl,
-		// 			path: "/",
-		// 		})
-		// 		router.replace("/calendars")
-		// 		return response.data.message
-		// 	},
-		// 	error: (error) => {
-		// 		if (error.response.data.errors) {
-		// 			if (error.response.data.errors.name)
-		// 				for (
-		// 					let i = 0;
-		// 					i < error.response.data.errors.name.length;
-		// 					i++
-		// 				)
-		// 					toast.error(error.response.data.errors.name[i])
-		// 			if (error.response.data.errors.password)
-		// 				for (
-		// 					let i = 0;
-		// 					i < error.response.data.errors.password.length;
-		// 					i++
-		// 				)
-		// 					toast.error(error.response.data.errors.password[i])
-		// 		}
-		// 		return error.response.data.message
-		// 	},
-		// })
+		toast.promise(promise, {
+			loading: "Logging in...",
+			success: (response) => {
+				setCookie(null, "user", response.data.cookie, {
+					maxAge: JSON.parse(response.data.cookie).ttl,
+					path: "/",
+				})
+				router.replace("/")
+				return response.data.message
+			},
+			error: (error) => {
+				if (error.response.data.errors) {
+					if (error.response.data.errors.name)
+						for (
+							let i = 0;
+							i < error.response.data.errors.name.length;
+							i++
+						)
+							toast.error(error.response.data.errors.name[i])
+					if (error.response.data.errors.password)
+						for (
+							let i = 0;
+							i < error.response.data.errors.password.length;
+							i++
+						)
+							toast.error(error.response.data.errors.password[i])
+				}
+				return error.response.data.message
+			},
+		})
 	}
 	return (
 		<Application title='Sign In'>

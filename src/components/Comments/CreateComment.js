@@ -1,11 +1,58 @@
 import { useState } from "react"
+import axios from "axios"
+import toast from "react-hot-toast"
 import style from "../../styles/app.module.scss"
 
-const CreateComment = ({ user, event_id }) => {
+const CreateComment = ({ user, event_id, setComments }) => {
 	const [content, setContent] = useState("")
 
 	const handleSubmit = () => {
-		console.log(content)
+		const api = {
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+				Authorization: user.token,
+			},
+			url: `${process.env.API_URL}/events/${event_id}/comments`,
+		}
+		toast.promise(
+			axios.post(
+				api.url,
+				{ content },
+				{
+					headers: api.headers,
+				}
+			),
+			{
+				loading: "Commenting ...",
+				success: (response) => {
+					setComments((prevState) => [
+						...prevState,
+						Object.assign(response.data, {
+							user: {
+								name: user.name,
+								image: user.image,
+							},
+						}),
+					])
+					return "Comment created!"
+				},
+				error: (error) => {
+					if (error.response.data.errors) {
+						if (error.response.data.errors.content)
+							for (
+								let i = 0;
+								i < error.response.data.errors.content.length;
+								i++
+							)
+								toast.error(
+									error.response.data.errors.content[i]
+								)
+					}
+					return error.response.data.message
+				},
+			}
+		)
 	}
 
 	return (

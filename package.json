@@ -1,7 +1,7 @@
 {
   "name": "munity-next",
   "version": "1.0.0",
-  "description": "Munity is a",
+  "description": "Munity is a service where you can join any event of any kind around the world or create your own!",
   "main": "index.js",
   "scripts": {
     "start": "next start",
@@ -11,17 +11,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PAXANDDOS/uevent-next.git"
+    "url": "git+https://github.com/PAXANDDOS/munity-next.git"
   },
   "keywords": [
-    "uevent"
+    "munity",
+    "events",
+    "celebration"
   ],
   "author": "Paul Litovka",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/PAXANDDOS/uevent-next/issues"
+    "url": "https://github.com/PAXANDDOS/munity-next/issues"
   },
-  "homepage": "https://github.com/PAXANDDOS/uevent-next#readme",
+  "homepage": "https://github.com/PAXANDDOS/munity-next#readme",
   "dependencies": {
     "@react-google-maps/api": "^2.7.0",
     "axios": "^0.24.0",
@@ -32,11 +34,11 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hot-toast": "^2.1.1",
-    "sass": "^1.45.0",
+    "sass": "^1.45.1",
     "use-places-autocomplete": "^1.11.0"
   },
   "devDependencies": {
-    "eslint": "8.4.0",
+    "eslint": "8.5.0",
     "eslint-config-next": "12.0.7"
   }
 }

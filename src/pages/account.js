@@ -9,11 +9,13 @@ import { useRouter } from "next/router"
 import Application from "../components"
 import style from "../styles/app.module.scss"
 import AccountList from "../components/Account/AccountList"
+import AccountNotificationList from "../components/Account/AccountNotificationList"
 
-const Account = ({ user }) => {
+const Account = ({ user, events, notifications }) => {
 	const router = useRouter()
 	const [name, setName] = useState(user.name)
 	const [email, setEmail] = useState(user.email)
+	const [role, setRole] = useState(user.role === "company")
 
 	const handleChange = (e) => {
 		switch (e.target.id) {
@@ -22,6 +24,9 @@ const Account = ({ user }) => {
 				break
 			case "email":
 				setEmail(e.target.value)
+				break
+			case "role":
+				setRole(e.target.checked)
 				break
 			case "image":
 				const formData = new FormData()
@@ -69,12 +74,15 @@ const Account = ({ user }) => {
 			data: {
 				name: name,
 				email: email,
+				role: role ? "company" : "user",
 			},
 			url: `${process.env.API_URL}/users/me`,
 		}
 
 		if (name === user.name) delete api.data.name
 		if (email === user.email) delete api.data.email
+		if (role === (user.role === "company" ? true : false))
+			delete api.data.role
 		if (Object.keys(api.data).length === 0) {
 			toast.error("Nothing to update.")
 			return
@@ -110,6 +118,8 @@ const Account = ({ user }) => {
 							i++
 						)
 							toast.error(error.response.data.errors.email[i])
+					if (error.response.data.errors.role)
+						toast.error(error.response.data.errors.role)
 				}
 				return error.response.data.message
 			},
@@ -129,6 +139,7 @@ const Account = ({ user }) => {
 							layout='fixed'
 							quality={100}
 							objectFit='cover'
+							priority
 						/>
 						<label htmlFor='image'>Upload an image</label>
 						<input
@@ -142,7 +153,7 @@ const Account = ({ user }) => {
 						onSubmit={(e) => handleSubmit(e.preventDefault())}
 						className={style.accountDataBlock}
 					>
-						<label htmlFor='username'>Username</label>
+						<label htmlFor='name'>Username</label>
 						<input
 							id='name'
 							value={name}
@@ -159,13 +170,23 @@ const Account = ({ user }) => {
 							type='email'
 							disabled={true}
 						/>
+						<label htmlFor='role'>I&apos;m a company</label>
+						<input
+							id='role'
+							checked={role}
+							onChange={(e) => handleChange(e)}
+							type='checkbox'
+						/>
 						<input type='submit' value='Apply' />
 					</form>
 				</div>
 				<div className={style.accountLists}>
-					<AccountList type='events' />
-					<AccountList type='tickets' />
-					<AccountList type='notifications' />
+					<AccountList
+						user={user}
+						type={user.role === "user" ? "tickets" : "events"}
+						events={events}
+					/>
+					<AccountNotificationList notifications={notifications} />
 				</div>
 			</div>
 		</Application>
@@ -181,8 +202,33 @@ export async function getServerSideProps(ctx) {
 				destination: "/signin",
 			},
 		}
+	const user = JSON.parse(cookie)
 
-	return { props: { user: JSON.parse(cookie) } }
+	const resEvents = await axios.get(
+		`${process.env.API_URL}/users/me/events`,
+		{
+			headers: {
+				Authorization: user.token,
+			},
+		}
+	)
+
+	const resNotifications = await axios.get(
+		`${process.env.API_URL}/users/me/notifications`,
+		{
+			headers: {
+				Authorization: user.token,
+			},
+		}
+	)
+
+	return {
+		props: {
+			user,
+			events: resEvents.data,
+			notifications: resNotifications.data,
+		},
+	}
 }
 
 export default Account

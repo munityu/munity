@@ -18,19 +18,22 @@ const options = {
 	disableDefaultUI: true,
 	zoomControl: true,
 }
-const center = {
-	lat: 49.98,
-	lng: 36.23,
-}
 const libraries = ["places"]
 
-const Map = ({ setLocation }) => {
+const Map = ({ location, setLocation }) => {
 	const { isLoaded, loadError } = useLoadScript({
 		googleMapsApiKey: process.env.GOOGLE_API_KEY,
 		libraries: libraries,
 	})
-	const [marker, setMarker] = useState([])
+	const [marker, setMarker] = useState(
+		location ? [{ lat: location[0], lng: location[1] }] : []
+	)
 	const [selected, setSelected] = useState(null)
+	const [center, setCenter] = useState(
+		location
+			? { lat: location[0], lng: location[1] }
+			: { lat: 49.98, lng: 36.23 }
+	)
 
 	const onMapClick = (e) => {
 		setMarker([
@@ -61,6 +64,7 @@ const Map = ({ setLocation }) => {
 				panTo={panTo}
 				setLocation={setLocation}
 				setMarker={setMarker}
+				setCenter={setCenter}
 			/>
 			<GoogleMap
 				id='map'

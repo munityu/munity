@@ -1,10 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
 
-import { Pin, Format, Theme, People, Comment } from "../../lib/icons/Misc"
+import { Pin, Format, Theme } from "../../lib/icons/Misc"
 import style from "../../styles/app.module.scss"
 
-const EventListObject = ({ event }) => {
+const EventShortObject = ({ organizer, event }) => {
 	if (event.description)
 		event.description =
 			event.description.length >= 400
@@ -14,10 +14,10 @@ const EventListObject = ({ event }) => {
 		<div className={style.eventListObject}>
 			<div className={style.eventListMain}>
 				<div className={style.eventListCreator} title='Organizer'>
-					<Link href={`/user/${event.organizer[0].name}`}>
+					<Link href={`/user/${organizer.name}`}>
 						<a className={style.eventListCreatorImage}>
 							<Image
-								src={event.organizer[0].image}
+								src={organizer.image}
 								alt='creatorImage'
 								width={64}
 								height={64}
@@ -28,7 +28,7 @@ const EventListObject = ({ event }) => {
 						</a>
 					</Link>
 					<h3 className={style.eventListCreatorName}>
-						{event.organizer[0].name}
+						{organizer.name}
 					</h3>
 				</div>
 				<span className={style.eventListPrice} title='Price'>
@@ -36,9 +36,7 @@ const EventListObject = ({ event }) => {
 				</span>
 			</div>
 			<div className={style.eventListInfo}>
-				<Link
-					href={`/user/${event.organizer[0].name}/events/${event.id}`}
-				>
+				<Link href={`/user/${organizer.name}/events/${event.id}`}>
 					<a className={style.eventListTitle}>{event.title}</a>
 				</Link>
 				<span className={style.eventListDecsription}>
@@ -62,21 +60,10 @@ const EventListObject = ({ event }) => {
 						<Format />
 						{event.format}
 					</span>
-					<span
-						className={style.eventListSubObject}
-						title='Also coming'
-					>
-						<People />
-						{event.members.length}
-					</span>
-					<span className={style.eventListSubObject} title='Comments'>
-						<Comment />
-						{event.comments.length}
-					</span>
 				</div>
 			</div>
 		</div>
 	)
 }
 
-export default EventListObject
+export default EventShortObject

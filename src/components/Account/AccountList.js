@@ -1,7 +1,7 @@
 import style from "../../styles/app.module.scss"
 import AccountListObject from "./AccountListObject"
 
-const AccountList = ({ type }) => {
+const AccountList = ({ user, type, events }) => {
 	let title
 	switch (type) {
 		case "events":
@@ -20,8 +20,15 @@ const AccountList = ({ type }) => {
 				<h2>{title}</h2>
 			</div>
 			<div className={style.accountListBody}>
-				<AccountListObject />
-				<AccountListObject />
+				{events.map((event) => {
+					return (
+						<AccountListObject
+							key={event.id}
+							user={user}
+							event={event}
+						/>
+					)
+				})}
 			</div>
 		</div>
 	)

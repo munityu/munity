@@ -1,44 +1,55 @@
+import Link from "next/link"
 import style from "../../styles/app.module.scss"
 import { Format, Theme, People, Comment } from "../../lib/icons/Misc"
 
-const AccountListObject = () => {
+const AccountListObject = ({ user, event }) => {
+	event.date = new Date(event.date)
 	return (
 		<div className={style.accountListObject}>
 			<h2 className={style.accountListDate}>
-				17 Jun
+				{event.date.getDate()}&nbsp;
+				{event.date.toLocaleString("en-US", { month: "short" })}
 				<br />
-				13:00
+				{`${
+					(event.date.getHours() < 10 ? "0" : "") +
+					event.date.getHours()
+				}:${
+					(event.date.getMinutes() < 10 ? "0" : "") +
+					event.date.getMinutes()
+				}`}
 			</h2>
 			<div className={style.accountListInfo}>
-				<h2 className={style.accountListTitle}>Best party ever</h2>
+				<Link href={`/user/${user.name}/events/${event.id}`}>
+					<a className={style.accountListTitle}>{event.title}</a>
+				</Link>
 				<div className={style.accountListSub}>
 					<span
 						className={style.accountListSubObject}
 						title='Event theme'
 					>
 						<Theme />
-						Music
+						{event.theme}
 					</span>
 					<span
 						className={style.accountListSubObject}
 						title='Event format'
 					>
 						<Format />
-						Concert
+						{event.format}
 					</span>
 					<span
 						className={style.accountListSubObject}
 						title='Also coming'
 					>
 						<People />
-						69
+						{event.members?.length}
 					</span>
 					<span
 						className={style.accountListSubObject}
 						title='Comments'
 					>
 						<Comment />
-						420
+						{event.comments?.length}
 					</span>
 				</div>
 			</div>

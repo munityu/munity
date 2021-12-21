@@ -1,5 +1,7 @@
+import axios from "axios"
 import nookies from "nookies"
 import { useState } from "react"
+import toast from "react-hot-toast"
 
 import Application from "../../../../../components"
 import { Card } from "../../../../../lib/icons/Misc.jsx"
@@ -10,7 +12,24 @@ const Order = ({ user, event }) => {
 	const [cardDate, setCardDate] = useState("")
 	const [cardCVV, setCardCVV] = useState("")
 
-	const handleOrder = () => {}
+	const handleOrder = () => {
+		toast.promise(
+			axios.post(
+				`${process.env.API_URL}/events/${event.id}/subscribe`,
+				null,
+				{ headers: { Authorization: user.token } }
+			),
+			{
+				loading: "Ordering...",
+				success: () => {
+					event.page
+						? window.open(event.page, "_ blank")
+						: location.reload()
+				},
+				error: "Bad",
+			}
+		)
+	}
 
 	return (
 		<Application user={user} title={"Buy a ticket"}>
@@ -28,8 +47,12 @@ const Order = ({ user, event }) => {
 					</div>
 					<div className={style.amountInfoLine}>
 						<span>
-							Ticket to the {event.organizer.name}&apos;s event
+							Ticket to the {event.organizer[0].name}&apos;s event
 						</span>
+						<div>
+							<span>#ID</span>
+							<span>{event.id}</span>
+						</div>
 					</div>
 				</div>
 				<div className={style.cardHead}>
@@ -90,60 +113,30 @@ const Order = ({ user, event }) => {
 
 export async function getServerSideProps(ctx) {
 	const cookie = nookies.get(ctx).user
+	if (!!!cookie)
+		return {
+			redirect: {
+				permanent: false,
+				destination: "/signin",
+			},
+		}
+	const user = JSON.parse(cookie)
 
-	const event = {
-		title: "The best party ever!",
-		description:
-			"Blah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blah Blah blah blahBlah blah blah Blah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blahBlah blah blah",
-		poster: "https://d3djy7pad2souj.cloudfront.net/munity/posters/akino.jpg",
-		format: "Party",
-		theme: "Entertainment",
-		price: 10.0,
-		location: [50.01303427698978, 36.22673034667969],
-		address: "Niggstreet 29, 35, Furland",
-		date: "12-15-2021 16:00:00",
-		nv_notifications: false,
-		public_visitors: false,
-		promocode: null,
-		users: [
-			{
-				id: 1,
-				name: "Nword",
-				image: "https://cdn.discordapp.com/attachments/641997907154698250/921027016516575252/come-again-nigga-are-you-feeling-it-now-mr-krabs-55766070.jpg",
-			},
-			{
-				id: 2,
-				name: "Furry",
-				image: "https://cdn.discordapp.com/attachments/641997907154698250/921027016516575252/come-again-nigga-are-you-feeling-it-now-mr-krabs-55766070.jpg",
-			},
-		],
-		organizer: {
-			name: "Kupariss",
-			image: "https://cdn.discordapp.com/attachments/701503404513427466/918933315115950180/unknown.png",
-		},
-		comments: [
-			{
-				id: 1,
-				user: {
-					name: "Cringe",
-					image: "https://cdn.discordapp.com/attachments/701503404513427466/918933315115950180/unknown.png",
+	const response = await axios.get(
+		`${process.env.API_URL}/events/${ctx.params.id}`
+	)
+
+	for (const member of response.data.members)
+		if (member.id === user.id)
+			return {
+				redirect: {
+					permanent: false,
+					destination: `/user/${ctx.params.name}/events/${ctx.params.id}`,
 				},
-				content: "I'm already cumming!",
-			},
-			{
-				id: 2,
-				user: {
-					name: "Dumbass",
-					image: "https://cdn.discordapp.com/attachments/701503404513427466/918933315115950180/unknown.png",
-				},
-				content: "What?!",
-			},
-		],
-		page: "https://t.me/paxanddos",
-	}
+			}
 
 	return {
-		props: { user: cookie ? JSON.parse(cookie) : null, event },
+		props: { user, event: response.data },
 	}
 }
 
