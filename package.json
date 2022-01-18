@@ -1,44 +1,45 @@
 {
-  "name": "munity-next",
-  "version": "1.0.0",
-  "description": "Munity is a service where you can join any event of any kind around the world or create your own!",
-  "main": "index.js",
-  "scripts": {
-    "start": "next start",
-    "build": "next build",
-    "dev": "next dev",
-    "lint": "next lint"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PAXANDDOS/munity-next.git"
-  },
-  "keywords": [
-    "munity",
-    "events",
-    "celebration"
-  ],
-  "author": "Paul Litovka",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/PAXANDDOS/munity-next/issues"
-  },
-  "homepage": "https://github.com/PAXANDDOS/munity-next#readme",
-  "dependencies": {
-    "@react-google-maps/api": "^2.7.0",
-    "axios": "^0.24.0",
-    "dayjs": "^1.10.7",
-    "next": "^12.0.7",
-    "nookies": "^2.5.2",
-    "nprogress": "^0.2.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-hot-toast": "^2.1.1",
-    "sass": "^1.45.1",
-    "use-places-autocomplete": "^1.11.0"
-  },
-  "devDependencies": {
-    "eslint": "8.5.0",
-    "eslint-config-next": "12.0.7"
-  }
+	"name": "munity-next",
+	"version": "1.0.0",
+	"description": "Munity is a service where you can join any event of any kind around the world or create your own!",
+	"main": "index.js",
+	"private": true,
+	"scripts": {
+		"start": "next start",
+		"build": "next build",
+		"dev": "next dev",
+		"lint": "next lint"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PAXANDDOS/munity-next.git"
+	},
+	"keywords": [
+		"munity",
+		"events",
+		"celebration"
+	],
+	"author": "Paul Litovka",
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/PAXANDDOS/munity-next/issues"
+	},
+	"homepage": "https://github.com/PAXANDDOS/munity-next#readme",
+	"dependencies": {
+		"@react-google-maps/api": "^2.7.0",
+		"axios": "^0.25.0",
+		"dayjs": "^1.10.7",
+		"next": "^12.0.8",
+		"nookies": "^2.5.2",
+		"nprogress": "^0.2.0",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-hot-toast": "^2.2.0",
+		"sass": "^1.48.0",
+		"use-places-autocomplete": "^1.11.0"
+	},
+	"devDependencies": {
+		"eslint": "8.7.0",
+		"eslint-config-next": "12.0.8"
+	}
 }
